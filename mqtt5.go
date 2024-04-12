@@ -88,18 +88,18 @@ func (m *Mqtt5) StartProcessingMessages() {
 			case msg := <-m.msgChan:
 				log.Printf("Received message on channel for topic %s", msg.Topic)
 				// Reset msgCount based on your rate limiting logic
-				if msgCount < m.SubscribeRateMax {
-					// Check for a matching handler using the TopicMatch function
-					for pattern, handler := range m.fncMap {
-						if TopicMatch(pattern, msg.Topic) {
-							handler(msg.Topic, msg.Payload)
-							msgCount++
-							break // Assume one handler per message; remove if multiple handlers are allowed
-						}
+				//if msgCount < m.SubscribeRateMax {
+				// Check for a matching handler using the TopicMatch function
+				for pattern, handler := range m.fncMap {
+					if TopicMatch(pattern, msg.Topic) {
+						handler(msg.Topic, msg.Payload)
+						msgCount++
+						break // Assume one handler per message; remove if multiple handlers are allowed
 					}
-				} else {
-					log.Println("Dropping message due to rate limit")
 				}
+				//} else {
+				//	log.Println("Dropping message due to rate limit")
+				//}
 			case <-ticker.C:
 				msgCount = 0
 			}
@@ -143,21 +143,21 @@ func (m *Mqtt5) StartPublishRateLimiting() {
 		for {
 			select {
 			case msg := <-m.publishMsgChan:
-				if msgCount < m.PublishRateMax {
-					// Publish message
-					_, err := m.cm.Publish(context.Background(), &paho.Publish{
-						Topic:   msg.topic,
-						Payload: msg.payload,
-						QoS:     msg.qos,
-						Retain:  msg.retain,
-					})
-					if err != nil {
-						log.Printf("Error publishing message: %v", err)
-					}
-					msgCount++
-				} else {
-					log.Println("Dropping publish message due to rate limit")
+				//if msgCount < m.PublishRateMax {
+				// Publish message
+				_, err := m.cm.Publish(context.Background(), &paho.Publish{
+					Topic:   msg.topic,
+					Payload: msg.payload,
+					QoS:     msg.qos,
+					Retain:  msg.retain,
+				})
+				if err != nil {
+					log.Printf("Error publishing message: %v", err)
 				}
+				msgCount++
+				//} else {
+				//	log.Println("Dropping publish message due to rate limit")
+				//}
 			case <-ticker.C:
 				msgCount = 0
 			}
@@ -181,7 +181,6 @@ func (m *Mqtt5) Publish(topic string, payload interface{}) error {
 	if m.isConnectDown() {
 		return errors.New("no current connection to the broker")
 	}
-	fmt.Println()
 	p, err := m.checkPayload(payload)
 	if err != nil {
 		return err
