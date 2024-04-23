@@ -28,12 +28,11 @@ func TestNewMqttClient(t *testing.T) {
 	if err != nil {
 		return
 	}
-	cli.StartPublishRateLimiting()
 	cli.StartProcessingMessages()
 
 	cli.Subscribe("ros/global/+", handleFunction)
 
-	err = cli.Publish("ros/global/1234", "1234")
+	err = cli.Publish("ros/global/1234", "1234ssss")
 	err = cli.Publish("ros/hey", "1234")
 	err = cli.Publish("ros/global", "1234")
 

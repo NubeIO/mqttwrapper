@@ -129,7 +129,7 @@ type publishMessage struct {
 	retain  bool
 }
 
-func (m *Mqtt5) StartPublishRateLimiting() {
+func (m *Mqtt5) startPublishRateLimiting() {
 	m.publishMsgChan = make(chan *publishMessage, m.PublishRateMax)
 	m.wg.Add(1)
 	go func() {
@@ -185,12 +185,13 @@ func (m *Mqtt5) Publish(topic string, payload interface{}) error {
 	if err != nil {
 		return err
 	}
-	select {
-	case m.publishMsgChan <- &publishMessage{topic, p, m.qos, m.retain}:
-		return nil
-	default:
-		return errors.New("publish message dropped due to rate limit")
-	}
+	_, err = m.cm.Publish(context.Background(), &paho.Publish{
+		Topic:   topic,
+		Payload: p,
+		QoS:     m.qos,
+		Retain:  m.retain,
+	})
+	return err
 
 }
 
