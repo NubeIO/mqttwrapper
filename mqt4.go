@@ -12,6 +12,11 @@ type Mqtt4 struct {
 	opts   *mqtt.ClientOptions
 }
 
+func (c *Mqtt4) RequestResponseStream(bufferDuration int, publishTopic, responseTopic, requestUUID string, body interface{}) []*Response {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *Mqtt4) RequestResponse(timeoutSeconds int, publishTopic, responseTopic, requestUUID string, body interface{}) *Response {
 	//TODO implement me
 	panic("implement me")
