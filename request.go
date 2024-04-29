@@ -42,7 +42,13 @@ func (m *Mqtt5) RequestResponse(timeoutSeconds int, publishTopic, responseTopic,
 	}
 
 	// Subscribe to the response topic temporarily
-	m.Subscribe(responseTopic, handleFunc)
+	err := m.Subscribe(responseTopic, handleFunc)
+	if err != nil {
+		return &Response{
+			Error:       fmt.Sprintf("Subscribe failed: %v", err),
+			RequestUUID: requestUUID,
+		}
+	}
 	defer m.Unsubscribe(responseTopic)
 
 	// Marshal body to JSON for the payload
