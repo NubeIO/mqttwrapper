@@ -71,6 +71,6 @@ func TestRequestResponse(t *testing.T) {
 		return
 	}
 	cli.StartProcessingMessages()
-	resp := cli.RequestResponse(10, "test", "test/resp", "abc", "hello")
-	fmt.Println(resp.AsString())
+	resp := cli.RequestResponse(11, "test", "test/resp", "abc", "hello")
+	fmt.Println(resp.GetBody())
 }
