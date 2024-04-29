@@ -219,6 +219,9 @@ func (m *Mqtt5) UnsubscribeMany(topics []string) error {
 		Topics:     topics,
 		Properties: nil,
 	}
+	for _, topic := range topics {
+		delete(m.fncMap, topic)
+	}
 	_, err := m.cm.Unsubscribe(context.Background(), u)
 	return err
 }
@@ -234,6 +237,7 @@ func (m *Mqtt5) Unsubscribe(topic string) error {
 		Topics:     []string{topic},
 		Properties: nil,
 	}
+	delete(m.fncMap, topic)
 	_, err := m.cm.Unsubscribe(context.Background(), u)
 	return err
 }
@@ -265,7 +269,7 @@ func (m *Mqtt5) Subscribe(topic string, fnc SubscribeHandleFunction) error {
 	})
 
 	if err != nil {
-
+		return err
 	}
 
 	return nil

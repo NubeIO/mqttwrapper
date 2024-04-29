@@ -59,7 +59,7 @@ func (m *Mqtt5) RequestResponse(timeoutSeconds int, publishTopic, responseTopic,
 			RequestUUID: requestUUID,
 		}
 	}
-
+	fmt.Println(publishTopic, string(jsonBody))
 	// Publish the request
 	if err := m.Publish(publishTopic, jsonBody); err != nil {
 		return &Response{
