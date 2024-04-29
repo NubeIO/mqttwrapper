@@ -13,6 +13,9 @@ type Response struct {
 }
 
 func (receiver *Response) AsString() string {
+	if receiver.Error != "" {
+		return receiver.Error
+	}
 	return string(receiver.Body)
 }
 
