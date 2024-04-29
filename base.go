@@ -37,7 +37,7 @@ type MQTT interface {
 	Unsubscribe(topics string) error
 	UnsubscribeMany(topics []string) error
 	StartProcessingMessages()
-	//StartPublishRateLimiting()
+	RequestResponse(timeoutSeconds int, publishTopic, responseTopic, requestUUID string, body interface{}) *Response
 }
 
 // Version of the cli
