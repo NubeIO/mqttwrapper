@@ -12,6 +12,10 @@ type Response struct {
 	Error       string
 }
 
+func (receiver *Response) AsString() string {
+	return string(receiver.Body)
+}
+
 // RequestResponse sends a request and waits for a response with a timeout
 func (m *Mqtt5) RequestResponse(timeoutSeconds int, publishTopic, responseTopic, requestUUID string, body interface{}) *Response {
 	respChan := make(chan *Response)
