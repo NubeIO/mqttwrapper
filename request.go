@@ -12,11 +12,19 @@ type Response struct {
 	Error       string
 }
 
+func (receiver *Response) GetBody() []byte {
+	return receiver.Body
+}
+
 func (receiver *Response) AsString() string {
 	if receiver.Error != "" {
-		return receiver.Error
+		return fmt.Sprintf("err: %s uuid: %s", receiver.Error, receiver.RequestUUID)
 	}
 	return string(receiver.Body)
+}
+
+func (receiver *Response) GetUUID() string {
+	return receiver.RequestUUID
 }
 
 // RequestResponse sends a request and waits for a response with a timeout
